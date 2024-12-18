@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intercambio entre Familias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            margin: 20px;
+        }
+
+        .familia-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .familia {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .resultado {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Intercambio entre Familias</h1>
+
+    <div class="login-container">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="login()">Iniciar Sesión</button>
+    </div>
+
+    <div class="familia-container" id="familiaContainer" style="display: none;">
+        <!-- Familias se generarán dinámicamente -->
+    </div>
+
+    <script>
+        const dataPorFamilia = {
+            "1234": {
+                nombre: "Familia 1",
+                integrantes: ["Santos", "Angeles"],
+            },
+            "5678": {
+                nombre: "Familia 2",
+                integrantes: ["Juana", "Margarita"],
+            },
+            "91011": {
+                nombre: "Familia 3",
+                integrantes: ["Lupe", "Iván", "Emilio"],
+            },
+            "121314": {
+                nombre: "Familia 4",
+                integrantes: ["Magui", "Omar", "Angel", "Luis", "Lulu"],
+            },
+            "151617": {
+                nombre: "Familia 5",
+                integrantes: ["Jessi", "Mau", "Santiago"],
+            },
+            "181920": {
+                nombre: "Familia 6",
+                integrantes: ["Carlos", "Ulises", "Gisela"],
+            },
+            "212223": {
+                nombre: "Familia 7",
+                integrantes: ["Cesar"],
+            },
+        };
+
+        // Asignaciones predefinidas
+        const asignaciones = {
+            "Carlos": "Cesar",
+            "Cesar": "Margarita",
+            "Juana": "Iván",
+            "Angeles": "Luis",
+            "Santos": "Gisela",
+            "Lupe": "Magui",
+            "Iván": "Carlos",
+            "Margarita": "Angel",
+            "Magui": "Jessi",
+            "Jessi": "Magui", // Ajustado para que Jessi le dé a Magui
+            "Santiago": "Mau", // Ajustado para que Santi le dé a Mau
+            "Mau": "Emilio",
+            "Emilio": "Ulises",
+            "Ulises": "Juana",
+            "Angel": "Lulu",
+            "Luis": "Mau",
+            "Lulu": "Santos",
+            "Gisela": "Santiago",
+        };
+
+        function login() {
+            const password = document.getElementById('password').value;
+            const familiaContainer = document.getElementById('familiaContainer');
+
+            if (dataPorFamilia[password]) {
+                familiaContainer.style.display = 'flex';
+                renderFamilia(dataPorFamilia[password]);
+            } else {
+                alert('Contraseña incorrecta');
+            }
+        }
+
+        function renderFamilia(familia) {
+            const familiaContainer = document.getElementById('familiaContainer');
+            familiaContainer.innerHTML = '';
+
+            const familiaDiv = document.createElement('div');
+            familiaDiv.className = 'familia';
+
+            const title = document.createElement('h2');
+            title.textContent = familia.nombre;
+            familiaDiv.appendChild(title);
+
+            const intercambioDiv = document.createElement('div');
+            intercambioDiv.className = 'intercambio';
+
+            familia.integrantes.forEach(integrante => {
+                const resultadoDiv = document.createElement('div');
+                resultadoDiv.className = 'resultado';
+
+                const asignado = asignaciones[integrante] || "Sin asignación";
+                resultadoDiv.textContent = `${integrante}: ${asignado}`;
+                intercambioDiv.appendChild(resultadoDiv);
+            });
+
+            familiaDiv.appendChild(intercambioDiv);
+            familiaContainer.appendChild(familiaDiv);
+        }
+    </script>
+</body>
+</html>
