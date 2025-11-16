@@ -8,22 +8,22 @@
     <style>
         /* Estilos Generales y Fondo Elegante */
         body {
-            font-family: 'Georgia', serif; /* Tipo de letra más elegante */
+            font-family: 'Georgia', serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #b9f2ff 0%, #d1c4e9 100%); /* Fondo degradado suave */
+            background: linear-gradient(135deg, #b9f2ff 0%, #d1c4e9 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            color: #333; /* Texto principal oscuro */
+            color: #333;
             overflow-x: hidden;
         }
 
         h1 {
             margin: 20px 0;
-            color: #8b0000; /* Rojo Borgoña */
+            color: #8b0000;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
             font-size: 3.5rem;
             letter-spacing: 2px;
@@ -32,24 +32,23 @@
         }
         
         h2 {
-            color: #008080; /* Verde Esmeralda */
+            color: #008080;
             border-bottom: 2px solid #e0f2f1;
             padding-bottom: 10px;
         }
 
-        /* Estilos del Contenedor de Login/Resultado */
+        /* Estilos de Contenedor y Botones (Mismos que antes) */
         .card-container {
             max-width: 90%;
             width: 480px;
             padding: 40px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
             text-align: center;
             margin-top: 30px;
         }
 
-        /* Input y Botón */
         #password {
             width: 80%;
             padding: 14px;
@@ -71,13 +70,13 @@
             padding: 15px 30px;
             font-size: 1.2rem;
             color: #fff;
-            background: #008080; /* Verde Esmeralda */
+            background: #008080;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.2s ease;
             font-weight: bold;
-            box-shadow: 0 4px #005656; /* Efecto 3D suave */
+            box-shadow: 0 4px #005656;
         }
 
         button:hover {
@@ -91,7 +90,7 @@
             box-shadow: 0 2px #003d3d;
         }
 
-        /* Estilos de Revelación (Resultado) */
+        /* Estilos de Revelación */
         .familia-container {
             display: none;
             flex-direction: column;
@@ -102,7 +101,7 @@
 
         .integrante-resultado {
             padding: 18px 0;
-            border-bottom: 1px dashed #e0e0e0; /* Línea de puntos elegante */
+            border-bottom: 1px dashed #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -119,19 +118,45 @@
             color: #333;
         }
 
-        .ruleta {
+        /* --- NUEVOS ESTILOS PARA LA RULETA DINÁMICA --- */
+        .ruleta-wrapper {
+            /* Contenedor que recorta la vista, solo se ve un nombre */
+            width: 180px;
+            height: 40px; 
+            overflow: hidden;
+            border: 2px solid #8b0000;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            position: relative;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .ruleta-lista {
+            /* La lista que se desplaza */
+            position: absolute;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            transition: transform 3s ease-out; /* Velocidad de la ruleta */
+        }
+        
+        .ruleta-lista li {
+            /* Cada elemento de la ruleta (un nombre) */
+            height: 40px; 
+            line-height: 40px; 
+            text-align: center;
             font-weight: bold;
             font-size: 1.8rem;
-            color: #008080;
-            padding: 5px 10px;
-            min-width: 170px;
-            text-align: right;
+            color: #333;
         }
 
         .resultado-final {
-            color: #ff0000; /* Rojo Brillante */
+            color: #ff0000;
             font-weight: 800;
-            animation: bounceIn 0.8s forwards; /* Animación de rebote */
+            animation: bounceIn 0.8s forwards; 
         }
         
         /* Animaciones */
@@ -185,7 +210,7 @@
         
         let asignaciones = loadAssignments() || {}; 
         
-        // --- 2. LÓGICA DE SORTEO SEGURO (Persiste la lógica anterior) ---
+        // --- 2. LÓGICA DE SORTEO SEGURO (Mantenida) ---
 
         function realizarSorteoSeguro() {
             let maxIntentos = 1000;
@@ -236,7 +261,6 @@
             return stored ? JSON.parse(stored) : null;
         }
 
-        // Si no existen asignaciones al cargar el script (primera vez), se realizan
         if (Object.keys(asignaciones).length !== allNames.length) {
             asignaciones = realizarSorteoSeguro();
             if (!asignaciones) {
@@ -245,7 +269,7 @@
         }
 
 
-        // --- 3. FUNCIONES DE INTERFAZ Y REVELACIÓN ---
+        // --- 3. FUNCIONES DE INTERFAZ Y REVELACIÓN (Actualizadas) ---
         
         function login() {
             const password = document.getElementById('password').value.toUpperCase(); 
@@ -278,42 +302,69 @@
                 resultadoDiv.className = 'integrante-resultado';
                 resultadoDiv.innerHTML = `<span>${integrante} regala a:</span>`;
 
-                const spanResultado = document.createElement('span');
-                spanResultado.className = 'ruleta';
-                spanResultado.textContent = '...';
+                // Contenedor de la ruleta
+                const ruletaWrapper = document.createElement('div');
+                ruletaWrapper.className = 'ruleta-wrapper';
 
-                resultadoDiv.appendChild(spanResultado);
+                const ruletaList = document.createElement('ul');
+                ruletaList.className = 'ruleta-lista';
+                
+                ruletaWrapper.appendChild(ruletaList);
+                resultadoDiv.appendChild(ruletaWrapper);
                 familiaContainer.appendChild(resultadoDiv);
 
-                iniciarRuleta(integrante, spanResultado);
+                iniciarRuleta(integrante, ruletaList, ruletaWrapper);
             });
         }
 
-        function iniciarRuleta(integrante, spanElement) {
+        /**
+         * Crea la lista de nombres y aplica la animación de desplazamiento.
+         * @param {string} integrante - El nombre de quien regala.
+         * @param {HTMLElement} ruletaList - El elemento <ul> de la ruleta.
+         * @param {HTMLElement} ruletaWrapper - El elemento <div> contenedor.
+         */
+        function iniciarRuleta(integrante, ruletaList, ruletaWrapper) {
             const asignado = asignaciones[integrante] || "Sin asignar"; 
-            
-            const ruletaNames = allNames.filter(name => name !== integrante); 
-
             if (asignado === "Sin asignar") {
-                 spanElement.textContent = "Error de Sorteo";
-                 spanElement.classList.add('resultado-final');
+                 ruletaList.innerHTML = `<li style="color:red; font-size:1rem;">Error de Sorteo</li>`;
                  return;
             }
+            
+            // 1. Crear una secuencia de nombres para simular el desplazamiento.
+            // Repetimos la lista de nombres varias veces para asegurar un buen 'giro'.
+            const secuenciaNombres = [...allNames, ...allNames, ...allNames]; 
+            
+            // 2. Insertar el nombre final al final de la secuencia para asegurar la parada.
+            secuenciaNombres.push(asignado); 
 
-            let counter = 0;
-            const duracionTotal = 3000; 
-            let tiempoInicio = Date.now();
+            // 3. Rellenar la lista HTML
+            secuenciaNombres.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                ruletaList.appendChild(li);
+            });
 
-            const interval = setInterval(() => {
-                spanElement.textContent = ruletaNames[counter % ruletaNames.length];
-                counter++;
+            // 4. Calcular la posición final
+            const itemHeight = 40; // Altura definida en CSS
+            const finalIndex = secuenciaNombres.length - 1;
+            // El desplazamiento es negativo y se basa en el índice del último elemento.
+            const desplazamientoFinal = -finalIndex * itemHeight;
 
-                if (Date.now() - tiempoInicio > duracionTotal) {
-                    clearInterval(interval);
-                    spanElement.textContent = asignado;
-                    spanElement.classList.add('resultado-final');
+            // 5. Aplicar la animación CSS
+            // setTimeout asegura que el desplazamiento inicie después de que el DOM está renderizado
+            setTimeout(() => {
+                ruletaList.style.transform = `translateY(${desplazamientoFinal}px)`;
+            }, 100);
+
+            // 6. Aplicar el estilo final después de que termina la transición
+            setTimeout(() => {
+                // Selecciona el último elemento (que es el nombre asignado)
+                const finalElement = ruletaList.lastElementChild;
+                if(finalElement) {
+                    finalElement.classList.add('resultado-final');
+                    finalElement.style.color = '#ff0000'; // Asegura el color rojo
                 }
-            }, 100); 
+            }, 3000); // 3000ms es la duración de la transición definida en el CSS (3s)
         }
     </script>
 </body>
