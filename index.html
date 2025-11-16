@@ -4,225 +4,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intercambio entre Familias</title>
+    <title>🎄 Intercambio Familiar Secreto 🎁</title>
     <style>
-        /* General Styles */
+        /* Estilos Generales y Fondo */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #74ebd5, #9face6);
+            background: linear-gradient(135deg, #e3f2fd, #b3e5fc); /* Tonos más claros y festivos */
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: start;
-            height: 100vh;
-            overflow: hidden;
-            color: #333;
+            justify-content: center;
+            min-height: 100vh;
+            color: #1a237e; /* Azul oscuro */
+            overflow-x: hidden;
         }
 
         h1 {
             margin: 20px 0;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-            font-size: 2.5rem;
-            position: absolute;
-            top: 10px;
+            color: #d32f2f; /* Rojo de Navidad */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 3rem;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Login Styles */
-        .login-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            margin-top: 100px;
+        /* Estilos del Contenedor de Login/Resultado */
+        .card-container {
+            max-width: 90%;
+            width: 450px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 20px;
         }
 
+        /* Input y Botón */
         #password {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            width: 80%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border: 2px solid #90caf9;
+            border-radius: 8px;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
         }
 
         #password:focus {
-            border-color: #74ebd5;
+            border-color: #d32f2f;
+            box-shadow: 0 0 8px rgba(211, 47, 47, 0.4);
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 25px;
+            font-size: 1.1rem;
             color: #fff;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: linear-gradient(45deg, #d32f2f, #ff7043); /* Degradado Rojo/Naranja */
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: bold;
         }
 
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Familia Styles */
+        /* Estilos de Revelación (Resultado) */
         .familia-container {
             display: none;
             flex-direction: column;
             gap: 20px;
             margin-top: 20px;
-            width: 100%;
+        }
+
+        .integrante-resultado {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
+            font-size: 1.2rem;
+            font-weight: 500;
         }
 
-        .familia {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            width: 90%;
-        }
-
-        .resultado {
-            margin: 5px 0;
-            font-size: 18px;
+        .integrante-resultado:last-child {
+            border-bottom: none;
         }
 
         .ruleta {
-            display: inline-block;
             font-weight: bold;
-            font-size: 1.5rem;
-            color: #2575fc;
+            font-size: 1.6rem;
+            color: #1a237e;
+            padding: 5px 10px;
+            border-radius: 5px;
+            min-width: 150px; /* Asegura que no se mueva al cambiar de nombre */
+            transition: color 0.3s ease;
+        }
+
+        .resultado-final {
+            color: #d32f2f; /* Rojo final */
+            font-weight: 800;
+            animation: fadeIn 1s forwards;
+        }
+
+        /* Animación para la revelación final */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 
 <body>
+    <h1>🎄 Intercambio Familiar 🎁</h1>
 
-    <div class="login-container" id="loginContainer">
-        <input type="password" id="password" placeholder="Ingresa la contraseña">
-        <button onclick="login()">Iniciar Sesión</button>
+    <div class="card-container login-container" id="loginContainer">
+        <h2>Ingreso Familiar</h2>
+        <input type="password" id="password" placeholder="Ingresa la Contraseña Familiar">
+        <button onclick="login()">Ver a Quién Regalas</button>
+        <p style="font-size: 0.9rem; color: #757575;">*Solo necesitas una clave por familia</p>
     </div>
 
-    <div class="familia-container" id="familiaContainer"></div>
+    <div class="card-container familia-container" id="familiaContainer">
+        </div>
 
     <script>
+        // --- 1. DATOS DE ACCESO Y ASIGNACIONES ---
+
+        // Contraseñas de acceso por familia
         const dataPorFamilia = {
-            "1234": {
-                nombre: "Familia 1",
-                integrantes: ["Santos", "Angeles"],
-            },
-            "5678": {
-                nombre: "Familia 2",
-                integrantes: ["Juana", "Margarita"],
-            },
-            "91011": {
-                nombre: "Familia 3",
-                integrantes: ["Lupe", "Iván", "Emilio", "Paco"],
-            },
-            "121314": {
-                nombre: "Familia 4",
-                integrantes: ["Magui", "Omar", "Angel", "Luis", "Lulu"],
-            },
-            "151617": {
-                nombre: "Familia 5",
-                integrantes: ["Jessi", "Mau", "Santiago"],
-            },
-            "181920": {
-                nombre: "Familia 6",
-                integrantes: ["Carlos", "Ulises", "Gisela"],
-            },
-            "212223": {
-                nombre: "Familia 7",
-                integrantes: ["Cesar"],
-            },
+            "1234": { nombre: "Familia 1 (Santos, Angeles)", integrantes: ["Santos", "Angeles"] },
+            "5678": { nombre: "Familia 2 (Juana, Margarita)", integrantes: ["Juana", "Margarita"] },
+            "91011": { nombre: "Familia 3 (Lupe, Iván, Emilio, Paco)", integrantes: ["Lupe", "Iván", "Emilio", "Paco"] },
+            "121314": { nombre: "Familia 4 (Magui, Omar, Angel, Luis, Lulu)", integrantes: ["Magui", "Omar", "Angel", "Luis", "Lulu"] },
+            "151617": { nombre: "Familia 5 (Jessi, Mau, Santiago)", integrantes: ["Jessi", "Mau", "Santiago"] },
+            "181920": { nombre: "Familia 6 (Carlos, Ulises, Gisela)", integrantes: ["Carlos", "Ulises", "Gisela"] },
+            "212223": { nombre: "Familia 7 (Cesar)", integrantes: ["Cesar"] },
+            // Nuevas Familias (¡Asegúrate de asignarles contraseñas únicas!)
+            "F8EXTRA": { nombre: "Familia 8 (Nueva)", integrantes: ["NuevoA", "NuevoB"] },
+            "F9POSI": { nombre: "Familia 9 (Posibles)", integrantes: ["Posible1", "Posible2"] }, 
         };
 
-        const asignaciones= {
-            "Carlos": "Margarita",
-            "Cesar": "Luis",
-            "Juana": "Iván",
-            "Angeles": "Santos",
+        // Relación: [Quien Regala] : [A quien Regala]
+        const asignaciones = {
+            // (Debes actualizar esta lista con el sorteo de este año, incluyendo los nuevos)
             "Santos": "Gisela",
-            "Lupe": "Angel",
+            "Angeles": "Cesar",
+            "Juana": "Paco",
+            "Margarita": "Lupe",
+            "Lupe": "Iván",
             "Iván": "Carlos",
-            "Margarita": "Lulu",
-            "Magui": "Jessi",
-            "Jessi": "Magui",
-            "Santiago": "Mau",
-            "Mau": "Emilio",
-            "Emilio": "Ulises",
-            "Ulises": "Juana",
-            "Angel": "Lupe",
-            "Luis": "Santiago",
-            "Lulu": "Cesar",
-            "Gisela": "Angeles",
-            "Omar": "Paco",
+            "Emilio": "Mau",
             "Paco": "Omar",
+            "Magui": "Angel",
+            "Omar": "Luis",
+            "Angel": "Jessi",
+            "Luis": "Santiago",
+            "Lulu": "Angeles",
+            "Jessi": "Santos",
+            "Mau": "Margarita",
+            "Santiago": "Emilio",
+            "Carlos": "Ulises",
+            "Ulises": "Juana",
+            "Gisela": "Magui",
+            "Cesar": "NuevoA",
+            "NuevoA": "NuevoB",
+            "NuevoB": "Posible1",
+            "Posible1": "Posible2",
+            "Posible2": "Lulu",
         };
 
+        const allNames = Object.keys(asignaciones); // Nombres de todos los participantes
 
-        const allNames = Object.keys(asignaciones);
+        // --- 2. FUNCIONES DE LÓGICA ---
 
         function login() {
-            const password = document.getElementById('password').value;
+            const password = document.getElementById('password').value.toUpperCase(); // Convertir a mayúsculas por si acaso
             const loginContainer = document.getElementById('loginContainer');
             const familiaContainer = document.getElementById('familiaContainer');
+            const data = dataPorFamilia[password];
 
-            if (dataPorFamilia[password]) {
+            if (data) {
                 loginContainer.style.display = 'none';
                 familiaContainer.style.display = 'flex';
-                renderFamilia(dataPorFamilia[password]);
+                renderFamilia(data);
             } else {
-                alert('Contraseña incorrecta');
+                // Mensaje de error más discreto y rápido
+                alert('⚠️ Clave incorrecta. Por favor, verifica la contraseña familiar.');
+                document.getElementById('password').value = ''; // Limpiar el campo
+                document.getElementById('password').focus();
             }
         }
 
         function renderFamilia(familia) {
             const familiaContainer = document.getElementById('familiaContainer');
-            familiaContainer.innerHTML = '';
-
-            const familiaDiv = document.createElement('div');
-            familiaDiv.className = 'familia';
-
-            const title = document.createElement('h2');
-            familiaDiv.appendChild(title);
+            familiaContainer.innerHTML = `<h2>Miembros de ${familia.nombre}</h2>`;
 
             familia.integrantes.forEach(integrante => {
                 const resultadoDiv = document.createElement('div');
-                resultadoDiv.className = 'resultado';
+                resultadoDiv.className = 'integrante-resultado';
+                resultadoDiv.innerHTML = `<span>${integrante} regala a:</span>`;
 
-                const span = document.createElement('span');
-                span.className = 'ruleta';
+                const spanResultado = document.createElement('span');
+                spanResultado.className = 'ruleta';
+                spanResultado.textContent = '...'; // Texto inicial
 
-                resultadoDiv.textContent = `${integrante}: `;
-                resultadoDiv.appendChild(span);
-                familiaDiv.appendChild(resultadoDiv);
+                resultadoDiv.appendChild(spanResultado);
+                familiaContainer.appendChild(resultadoDiv);
 
-                // Simular la animación de ruleta
-                let counter = 0;
-                const interval = setInterval(() => {
-                    span.textContent = allNames[counter % allNames.length];
-                    counter++;
-                }, 100);
-
-                // Detener la ruleta en el nombre asignado
-                setTimeout(() => {
-                    clearInterval(interval);
-                    span.textContent = asignaciones[integrante] || "Sin asignación";
-                }, 3000); // Se detiene después de 3 segundos
+                iniciarRuleta(integrante, spanResultado);
             });
+        }
 
-            familiaContainer.appendChild(familiaDiv);
+        function iniciarRuleta(integrante, spanElement) {
+            const asignado = asignaciones[integrante] || "Pendiente"; // Obtener asignación
+
+            if (asignado === "Pendiente") {
+                 spanElement.textContent = "Sin asignación (Revisar lista)";
+                 spanElement.classList.add('resultado-final');
+                 return;
+            }
+
+            // Simular la animación de ruleta
+            let counter = 0;
+            const duracionTotal = 3000; // 3 segundos
+            let tiempoInicio = Date.now();
+
+            const interval = setInterval(() => {
+                // Asegurar que solo rote en los nombres válidos
+                spanElement.textContent = allNames[counter % allNames.length];
+                counter++;
+
+                if (Date.now() - tiempoInicio > duracionTotal) {
+                    clearInterval(interval);
+                    // Detener la ruleta en el nombre asignado con una animación final
+                    spanElement.textContent = asignado;
+                    spanElement.classList.add('resultado-final'); // Aplicar el estilo final
+                }
+            }, 100); // 100ms por paso
         }
     </script>
 </body>
