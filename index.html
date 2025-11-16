@@ -6,139 +6,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎄 Intercambio Familiar Secreto 🎁</title>
     <style>
-        /* Estilos Generales y Fondo */
+        /* Estilos Generales y Fondo Elegante */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Georgia', serif; /* Tipo de letra más elegante */
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e3f2fd, #b3e5fc); /* Tonos más claros y festivos */
+            background: linear-gradient(135deg, #b9f2ff 0%, #d1c4e9 100%); /* Fondo degradado suave */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            color: #1a237e; /* Azul oscuro */
+            color: #333; /* Texto principal oscuro */
             overflow-x: hidden;
         }
 
         h1 {
             margin: 20px 0;
-            color: #d32f2f; /* Rojo de Navidad */
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            font-size: 3rem;
-            position: relative;
+            color: #8b0000; /* Rojo Borgoña */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            font-weight: 700;
             z-index: 10;
+        }
+        
+        h2 {
+            color: #008080; /* Verde Esmeralda */
+            border-bottom: 2px solid #e0f2f1;
+            padding-bottom: 10px;
         }
 
         /* Estilos del Contenedor de Login/Resultado */
         .card-container {
             max-width: 90%;
-            width: 450px;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            width: 480px;
+            padding: 40px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         /* Input y Botón */
         #password {
             width: 80%;
-            padding: 12px;
-            font-size: 1.1rem;
-            border: 2px solid #90caf9;
+            padding: 14px;
+            font-size: 1.2rem;
+            border: 1px solid #ccc;
             border-radius: 8px;
             outline: none;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            text-align: center;
         }
 
         #password:focus {
-            border-color: #d32f2f;
-            box-shadow: 0 0 8px rgba(211, 47, 47, 0.4);
+            border-color: #8b0000;
+            box-shadow: 0 0 5px rgba(139, 0, 0, 0.5);
         }
 
         button {
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             color: #fff;
-            background: linear-gradient(45deg, #d32f2f, #ff7043); /* Degradado Rojo/Naranja */
+            background: #008080; /* Verde Esmeralda */
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: background 0.2s ease, transform 0.2s ease;
             font-weight: bold;
+            box-shadow: 0 4px #005656; /* Efecto 3D suave */
         }
 
         button:hover {
+            background: #005656;
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px #003d3d;
+        }
+        
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px #003d3d;
         }
 
         /* Estilos de Revelación (Resultado) */
         .familia-container {
             display: none;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             margin-top: 20px;
+            padding: 10px;
         }
 
         .integrante-resultado {
-            padding: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 18px 0;
+            border-bottom: 1px dashed #e0e0e0; /* Línea de puntos elegante */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 500;
         }
 
         .integrante-resultado:last-child {
             border-bottom: none;
+            margin-bottom: -15px;
+        }
+        
+        .integrante-resultado span:first-child {
+            color: #333;
         }
 
         .ruleta {
             font-weight: bold;
-            font-size: 1.6rem;
-            color: #1a237e;
+            font-size: 1.8rem;
+            color: #008080;
             padding: 5px 10px;
-            border-radius: 5px;
-            min-width: 150px; /* Asegura que no se mueva al cambiar de nombre */
-            transition: color 0.3s ease;
+            min-width: 170px;
+            text-align: right;
         }
 
         .resultado-final {
-            color: #d32f2f; /* Rojo final */
+            color: #ff0000; /* Rojo Brillante */
             font-weight: 800;
-            animation: fadeIn 1s forwards;
+            animation: bounceIn 0.8s forwards; /* Animación de rebote */
         }
-
-        /* Animación para la revelación final */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+        
+        /* Animaciones */
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.1); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 
 <body>
-    <h1>🎄 Intercambio Familiar 🎁</h1>
+    <h1>🌟 Intercambio Navideño</h1>
 
     <div class="card-container login-container" id="loginContainer">
-        <h2>Ingreso Familiar</h2>
-        <input type="password" id="password" placeholder="Ingresa la Contraseña Familiar">
-        <button onclick="login()">Ver a Quién Regalas</button>
-        <p style="font-size: 0.9rem; color: #757575;">*Solo necesitas una clave por familia</p>
+        <h2>Acceso Familiar</h2>
+        <input type="password" id="password" placeholder="Ingresa la Clave Familiar">
+        <button onclick="login()">¡Revelar Destino!</button>
+        <p style="font-size: 0.8rem; color: #757575; margin-top: 15px;">*Solo necesitas una clave por familia</p>
     </div>
 
     <div class="card-container familia-container" id="familiaContainer">
         </div>
 
     <script>
-        // --- 1. DATOS DE ACCESO Y ASIGNACIONES ---
-
-        // Contraseñas de acceso por familia
+        // --- 1. DATOS DE ACCESO Y FAMILIAS ---
+        
         const dataPorFamilia = {
             "1234": { nombre: "Familia 1 (Santos, Angeles)", integrantes: ["Santos", "Angeles"] },
             "5678": { nombre: "Familia 2 (Juana, Margarita)", integrantes: ["Juana", "Margarita"] },
@@ -147,58 +168,103 @@
             "151617": { nombre: "Familia 5 (Jessi, Mau, Santiago)", integrantes: ["Jessi", "Mau", "Santiago"] },
             "181920": { nombre: "Familia 6 (Carlos, Ulises, Gisela)", integrantes: ["Carlos", "Ulises", "Gisela"] },
             "212223": { nombre: "Familia 7 (Cesar)", integrantes: ["Cesar"] },
-            // Nuevas Familias (¡Asegúrate de asignarles contraseñas únicas!)
-            "F8EXTRA": { nombre: "Familia 8 (Nueva)", integrantes: ["NuevoA", "NuevoB"] },
-            "F9POSI": { nombre: "Familia 9 (Posibles)", integrantes: ["Posible1", "Posible2"] }, 
+            "F8EXTRA": { nombre: "Familia 8 (Lucía, Gael)", integrantes: ["Lucía", "Gael"] },
+            "F9CHAMIC": { nombre: "Familia 9 (Chavela, Michael)", integrantes: ["Chavela", "Michael"] },
+            "F10CONF": { nombre: "Familia 10 (Posibles 1 y 2)", integrantes: ["Posible1", "Posible2"] },
         };
 
-        // Relación: [Quien Regala] : [A quien Regala]
-        const asignaciones = {
-            // (Debes actualizar esta lista con el sorteo de este año, incluyendo los nuevos)
-            "Santos": "Gisela",
-            "Angeles": "Cesar",
-            "Juana": "Paco",
-            "Margarita": "Lupe",
-            "Lupe": "Iván",
-            "Iván": "Carlos",
-            "Emilio": "Mau",
-            "Paco": "Omar",
-            "Magui": "Angel",
-            "Omar": "Luis",
-            "Angel": "Jessi",
-            "Luis": "Santiago",
-            "Lulu": "Angeles",
-            "Jessi": "Santos",
-            "Mau": "Margarita",
-            "Santiago": "Emilio",
-            "Carlos": "Ulises",
-            "Ulises": "Juana",
-            "Gisela": "Magui",
-            "Cesar": "NuevoA",
-            "NuevoA": "NuevoB",
-            "NuevoB": "Posible1",
-            "Posible1": "Posible2",
-            "Posible2": "Lulu",
-        };
+        let allNames = [];
+        const familyMap = {}; 
+        for (const password in dataPorFamilia) {
+            const familia = dataPorFamilia[password];
+            familia.integrantes.forEach(nombre => {
+                allNames.push(nombre);
+                familyMap[nombre] = familia.nombre;
+            });
+        }
+        
+        let asignaciones = loadAssignments() || {}; 
+        
+        // --- 2. LÓGICA DE SORTEO SEGURO (Persiste la lógica anterior) ---
 
-        const allNames = Object.keys(asignaciones); // Nombres de todos los participantes
+        function realizarSorteoSeguro() {
+            let maxIntentos = 1000;
+            let intento = 0;
+            let asignacionesGeneradas = {};
+            let regalosDisponibles = [...allNames]; 
 
-        // --- 2. FUNCIONES DE LÓGICA ---
+            while (intento < maxIntentos) {
+                asignacionesGeneradas = {};
+                regalosDisponibles = [...allNames];
 
+                let sorteoExitoso = true;
+                
+                for (const regala of allNames) {
+                    const familiaRegala = familyMap[regala];
+                    let candidatos = regalosDisponibles.filter(regalo => familyMap[regalo] !== familiaRegala);
+
+                    if (candidatos.length === 0) {
+                        sorteoExitoso = false;
+                        break;
+                    }
+
+                    const randomIndex = Math.floor(Math.random() * candidatos.length);
+                    const regaloAsignado = candidatos[randomIndex];
+
+                    asignacionesGeneradas[regala] = regaloAsignado;
+                    regalosDisponibles.splice(regalosDisponibles.indexOf(regaloAsignado), 1);
+                }
+
+                if (sorteoExitoso && regalosDisponibles.length === 0) {
+                    saveAssignments(asignacionesGeneradas);
+                    return asignacionesGeneradas;
+                }
+
+                intento++;
+            }
+            
+            console.error("No se pudo encontrar una asignación válida después de " + maxIntentos + " intentos.");
+            return null;
+        }
+
+        function saveAssignments(assignments) {
+            localStorage.setItem('intercambioAsignaciones', JSON.stringify(assignments));
+        }
+
+        function loadAssignments() {
+            const stored = localStorage.getItem('intercambioAsignaciones');
+            return stored ? JSON.parse(stored) : null;
+        }
+
+        // Si no existen asignaciones al cargar el script (primera vez), se realizan
+        if (Object.keys(asignaciones).length !== allNames.length) {
+            asignaciones = realizarSorteoSeguro();
+            if (!asignaciones) {
+                alert("Hubo un error al realizar el sorteo. Por favor, recarga la página.");
+            }
+        }
+
+
+        // --- 3. FUNCIONES DE INTERFAZ Y REVELACIÓN ---
+        
         function login() {
-            const password = document.getElementById('password').value.toUpperCase(); // Convertir a mayúsculas por si acaso
+            const password = document.getElementById('password').value.toUpperCase(); 
             const loginContainer = document.getElementById('loginContainer');
             const familiaContainer = document.getElementById('familiaContainer');
             const data = dataPorFamilia[password];
+
+            if (!asignaciones || Object.keys(asignaciones).length !== allNames.length) {
+                alert("El sorteo no está completo. Por favor, contacta al organizador.");
+                return;
+            }
 
             if (data) {
                 loginContainer.style.display = 'none';
                 familiaContainer.style.display = 'flex';
                 renderFamilia(data);
             } else {
-                // Mensaje de error más discreto y rápido
                 alert('⚠️ Clave incorrecta. Por favor, verifica la contraseña familiar.');
-                document.getElementById('password').value = ''; // Limpiar el campo
+                document.getElementById('password').value = '';
                 document.getElementById('password').focus();
             }
         }
@@ -214,7 +280,7 @@
 
                 const spanResultado = document.createElement('span');
                 spanResultado.className = 'ruleta';
-                spanResultado.textContent = '...'; // Texto inicial
+                spanResultado.textContent = '...';
 
                 resultadoDiv.appendChild(spanResultado);
                 familiaContainer.appendChild(resultadoDiv);
@@ -224,31 +290,30 @@
         }
 
         function iniciarRuleta(integrante, spanElement) {
-            const asignado = asignaciones[integrante] || "Pendiente"; // Obtener asignación
+            const asignado = asignaciones[integrante] || "Sin asignar"; 
+            
+            const ruletaNames = allNames.filter(name => name !== integrante); 
 
-            if (asignado === "Pendiente") {
-                 spanElement.textContent = "Sin asignación (Revisar lista)";
+            if (asignado === "Sin asignar") {
+                 spanElement.textContent = "Error de Sorteo";
                  spanElement.classList.add('resultado-final');
                  return;
             }
 
-            // Simular la animación de ruleta
             let counter = 0;
-            const duracionTotal = 3000; // 3 segundos
+            const duracionTotal = 3000; 
             let tiempoInicio = Date.now();
 
             const interval = setInterval(() => {
-                // Asegurar que solo rote en los nombres válidos
-                spanElement.textContent = allNames[counter % allNames.length];
+                spanElement.textContent = ruletaNames[counter % ruletaNames.length];
                 counter++;
 
                 if (Date.now() - tiempoInicio > duracionTotal) {
                     clearInterval(interval);
-                    // Detener la ruleta en el nombre asignado con una animación final
                     spanElement.textContent = asignado;
-                    spanElement.classList.add('resultado-final'); // Aplicar el estilo final
+                    spanElement.classList.add('resultado-final');
                 }
-            }, 100); // 100ms por paso
+            }, 100); 
         }
     </script>
 </body>
