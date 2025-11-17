@@ -30,7 +30,7 @@
             font-weight: 700;
             z-index: 10;
         }
-        
+
         h2 {
             color: #008080;
             border-bottom: 2px solid #e0f2f1;
@@ -84,7 +84,7 @@
             transform: translateY(-2px);
             box-shadow: 0 6px #003d3d;
         }
-        
+
         button:active {
             transform: translateY(2px);
             box-shadow: 0 2px #003d3d;
@@ -113,7 +113,7 @@
             border-bottom: none;
             margin-bottom: -15px;
         }
-        
+
         .integrante-resultado span:first-child {
             color: #333;
         }
@@ -122,7 +122,7 @@
         .ruleta-wrapper {
             /* Contenedor que recorta la vista, solo se ve un nombre */
             width: 180px;
-            height: 40px; 
+            height: 40px;
             overflow: hidden;
             border: 2px solid #8b0000;
             border-radius: 5px;
@@ -140,13 +140,14 @@
             list-style: none;
             padding: 0;
             margin: 0;
-            transition: transform 3s ease-out; /* Velocidad de la ruleta */
+            transition: transform 3s ease-out;
+            /* Velocidad de la ruleta */
         }
-        
+
         .ruleta-lista li {
             /* Cada elemento de la ruleta (un nombre) */
-            height: 40px; 
-            line-height: 40px; 
+            height: 40px;
+            line-height: 40px;
             text-align: center;
             font-weight: bold;
             font-size: 1.8rem;
@@ -156,15 +157,28 @@
         .resultado-final {
             color: #ff0000;
             font-weight: 800;
-            animation: bounceIn 0.8s forwards; 
+            animation: bounceIn 0.8s forwards;
         }
-        
+
         /* Animaciones */
         @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3); }
-            50% { opacity: 1; transform: scale(1.1); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); }
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
     </style>
 </head>
@@ -180,11 +194,11 @@
     </div>
 
     <div class="card-container familia-container" id="familiaContainer">
-        </div>
+    </div>
 
     <script>
         // --- 1. DATOS DE ACCESO Y FAMILIAS ---
-        
+
         const dataPorFamilia = {
             "1234": { nombre: "Familia 1 (Santos, Angeles)", integrantes: ["Santos", "Angeles"] },
             "5678": { nombre: "Familia 2 (Juana, Margarita)", integrantes: ["Juana", "Margarita"] },
@@ -198,7 +212,7 @@
         };
 
         let allNames = [];
-        const familyMap = {}; 
+        const familyMap = {};
         for (const password in dataPorFamilia) {
             const familia = dataPorFamilia[password];
             familia.integrantes.forEach(nombre => {
@@ -206,28 +220,32 @@
                 familyMap[nombre] = familia.nombre;
             });
         }
-        
-        let asignaciones = loadAssignments() || {}; 
-        
+
+        let asignaciones = loadAssignments() || {};
+
         // --- 2. LÓGICA DE SORTEO SEGURO (Mantenida) ---
 
         function realizarSorteoSeguro() {
-            let maxIntentos = 1000;
+            let maxIntentos = 5000; // Aumentamos los intentos para esta regla más estricta
             let intento = 0;
-            let asignacionesGeneradas = {};
-            let regalosDisponibles = [...allNames]; 
 
             while (intento < maxIntentos) {
-                asignacionesGeneradas = {};
-                regalosDisponibles = [...allNames];
-
+                let asignacionesGeneradas = {};
+                let regalosDisponibles = [...allNames];
                 let sorteoExitoso = true;
-                
+
                 for (const regala of allNames) {
                     const familiaRegala = familyMap[regala];
+
+                    // 1. Filtrar candidatos: deben ser diferentes a la familia del que regala
                     let candidatos = regalosDisponibles.filter(regalo => familyMap[regalo] !== familiaRegala);
 
+                    // 2. Filtrar candidatos: deben evitar el intercambio mutuo.
+                    // Es decir, si el candidato 'regalo' ya fue asignado a 'regala' en una iteración previa, ¡no es válido!
+                    candidatos = candidatos.filter(regalo => asignacionesGeneradas[regalo] !== regala);
+
                     if (candidatos.length === 0) {
+                        // Si no hay candidatos válidos, este intento falla.
                         sorteoExitoso = false;
                         break;
                     }
@@ -240,17 +258,14 @@
                 }
 
                 if (sorteoExitoso && regalosDisponibles.length === 0) {
-                    saveAssignments(asignacionesGeneradas);
                     return asignacionesGeneradas;
                 }
 
                 intento++;
             }
-            
             console.error("No se pudo encontrar una asignación válida después de " + maxIntentos + " intentos.");
             return null;
         }
-
         function saveAssignments(assignments) {
             localStorage.setItem('intercambioAsignaciones', JSON.stringify(assignments));
         }
@@ -269,9 +284,9 @@
 
 
         // --- 3. FUNCIONES DE INTERFAZ Y REVELACIÓN (Actualizadas) ---
-        
+
         function login() {
-            const password = document.getElementById('password').value.toUpperCase(); 
+            const password = document.getElementById('password').value.toUpperCase();
             const loginContainer = document.getElementById('loginContainer');
             const familiaContainer = document.getElementById('familiaContainer');
             const data = dataPorFamilia[password];
@@ -307,7 +322,7 @@
 
                 const ruletaList = document.createElement('ul');
                 ruletaList.className = 'ruleta-lista';
-                
+
                 ruletaWrapper.appendChild(ruletaList);
                 resultadoDiv.appendChild(ruletaWrapper);
                 familiaContainer.appendChild(resultadoDiv);
@@ -323,18 +338,18 @@
          * @param {HTMLElement} ruletaWrapper - El elemento <div> contenedor.
          */
         function iniciarRuleta(integrante, ruletaList, ruletaWrapper) {
-            const asignado = asignaciones[integrante] || "Sin asignar"; 
+            const asignado = asignaciones[integrante] || "Sin asignar";
             if (asignado === "Sin asignar") {
-                 ruletaList.innerHTML = `<li style="color:red; font-size:1rem;">Error de Sorteo</li>`;
-                 return;
+                ruletaList.innerHTML = `<li style="color:red; font-size:1rem;">Error de Sorteo</li>`;
+                return;
             }
-            
+
             // 1. Crear una secuencia de nombres para simular el desplazamiento.
             // Repetimos la lista de nombres varias veces para asegurar un buen 'giro'.
-            const secuenciaNombres = [...allNames, ...allNames, ...allNames]; 
-            
+            const secuenciaNombres = [...allNames, ...allNames, ...allNames];
+
             // 2. Insertar el nombre final al final de la secuencia para asegurar la parada.
-            secuenciaNombres.push(asignado); 
+            secuenciaNombres.push(asignado);
 
             // 3. Rellenar la lista HTML
             secuenciaNombres.forEach(name => {
@@ -359,7 +374,7 @@
             setTimeout(() => {
                 // Selecciona el último elemento (que es el nombre asignado)
                 const finalElement = ruletaList.lastElementChild;
-                if(finalElement) {
+                if (finalElement) {
                     finalElement.classList.add('resultado-final');
                     finalElement.style.color = '#ff0000'; // Asegura el color rojo
                 }
