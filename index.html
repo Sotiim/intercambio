@@ -37,7 +37,7 @@
             padding-bottom: 10px;
         }
 
-        /* Estilos de Contenedor y Botones (Mismos que antes) */
+        /* Estilos de Contenedor y Botones */
         .card-container {
             max-width: 90%;
             width: 480px;
@@ -182,11 +182,11 @@
     <script>
         // --- 1. DATOS DE ACCESO Y FAMILIAS ---
 
-        // ESTE OBJETO SOLO SE USA PARA EL LOGIN Y LA VISUALIZACIÓN
+        // NOTA: Se ha quitado F10CONF, ya que sus miembros no fueron incluidos en el sorteo final.
         const dataPorFamilia = {
             "1234": { nombre: "Familia 1 (Santos, Angeles)", integrantes: ["Santos", "Angeles"] },
             "5678": { nombre: "Familia 2 (Juana, Margarita)", integrantes: ["Juana", "Margarita"] },
-            "91011": { nombre: "Familia 3 (Lupe, Iván, Emilio, Paco)", integrantes: ["Lupe", "Iván", "Emilio", "Paco"] },
+            "91011": { nombre: "Familia 3 (Lupe, Iván, Emilio)", integrantes: ["Lupe", "Iván", "Emilio"] },
             "121314": { nombre: "Familia 4 (Magui, Omar, Angel, Luis, Lulu)", integrantes: ["Magui", "Omar", "Angel", "Luis", "Lulu"] },
             "151617": { nombre: "Familia 5 (Jessi, Mau, Santiago)", integrantes: ["Jessi", "Mau", "Santiago"] },
             "181920": { nombre: "Familia 6 (Carlos, Ulises, Gisela)", integrantes: ["Carlos", "Ulises", "Gisela"] },
@@ -196,12 +196,32 @@
         };
 
         // ------------------------------------------------------------------
-        // *** ⚠️ PUNTO CLAVE: PEGA AQUÍ EL RESULTADO DEL SORTEO FIJO ⚠️ ***
-        // Este objeto DEBE contener el resultado que obtuviste de la consola.
-        // Ejemplo: "Santos": "Magui", "Angeles": "Cesar", ...
+        // *** ⚠️ PUNTO CLAVE: ASIGNACIONES FIJAS PEGADAS AQUÍ ⚠️ ***
         // ------------------------------------------------------------------
         const asignaciones = {
-            // PEGAR EL JSON FIJO DEL SORTEO AQUÍ
+            "Santos": "Margarita",
+            "Angeles": "Magui",
+            "Juana": "Gisela",
+            "Margarita": "Cesar",
+            "Lupe": "Chavela",
+            "Iván": "Lucía",
+            "Emilio": "Santiago",
+            "Magui": "Jessi",
+            "Omar": "Santos",
+            "Angel": "Gael",
+            "Luis": "Juana",
+            "Lulu": "Iván",
+            "Jessi": "Lupe",
+            "Mau": "Lulu",
+            "Santiago": "Luis",
+            "Carlos": "Michael",
+            "Ulises": "Angeles",
+            "Gisela": "Mau",
+            "Cesar": "Carlos",
+            "Lucía": "Angel",
+            "Gael": "Omar",
+            "Chavela": "Emilio",
+            "Michael": "Ulises"
         };
         // ------------------------------------------------------------------
 
@@ -223,7 +243,7 @@
 
             // Validación de que el sorteo fue cargado
             if (Object.keys(asignaciones).length === 0) {
-                alert("El sorteo aún no está cargado. Asegúrate de pegar el resultado en la variable 'asignaciones' en el código.");
+                alert("El sorteo aún no está cargado. Asegúrate de que la lista de asignaciones no esté vacía.");
                 return;
             }
 
@@ -268,7 +288,7 @@
         function iniciarRuleta(integrante, ruletaList) {
             const asignado = asignaciones[integrante] || "Sin asignar";
             if (asignado === "Sin asignar") {
-                ruletaList.innerHTML = `<li style="color:red; font-size:1rem;">Error de Sorteo</li>`;
+                ruletaList.innerHTML = `<li style="color:red; font-size:1rem;">Error: No fue asignado en el sorteo.</li>`;
                 return;
             }
 
@@ -285,7 +305,6 @@
             }
 
             // 2. Insertar el nombre final al final de la secuencia para asegurar la parada.
-            // Repetimos el asignado para que visualmente se "frene" sobre él.
             secuenciaNombres.push(asignado, asignado); 
 
             // 3. Rellenar la lista HTML
