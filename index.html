@@ -118,9 +118,8 @@
             color: #333;
         }
 
-        /* --- NUEVOS ESTILOS PARA LA RULETA DINÁMICA --- */
+        /* --- ESTILOS PARA LA RULETA DINÁMICA --- */
         .ruleta-wrapper {
-            /* Contenedor que recorta la vista, solo se ve un nombre */
             width: 180px;
             height: 40px;
             overflow: hidden;
@@ -132,7 +131,6 @@
         }
 
         .ruleta-lista {
-            /* La lista que se desplaza */
             position: absolute;
             width: 100%;
             display: flex;
@@ -141,11 +139,9 @@
             padding: 0;
             margin: 0;
             transition: transform 3s ease-out;
-            /* Velocidad de la ruleta */
         }
 
         .ruleta-lista li {
-            /* Cada elemento de la ruleta (un nombre) */
             height: 40px;
             line-height: 40px;
             text-align: center;
@@ -162,23 +158,10 @@
 
         /* Animaciones */
         @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.3);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-
-            70% {
-                transform: scale(0.9);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.1); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -199,6 +182,7 @@
     <script>
         // --- 1. DATOS DE ACCESO Y FAMILIAS ---
 
+        // ESTE OBJETO SOLO SE USA PARA EL LOGIN Y LA VISUALIZACIÓN
         const dataPorFamilia = {
             "1234": { nombre: "Familia 1 (Santos, Angeles)", integrantes: ["Santos", "Angeles"] },
             "5678": { nombre: "Familia 2 (Juana, Margarita)", integrantes: ["Juana", "Margarita"] },
@@ -211,79 +195,25 @@
             "F9CHAMIC": { nombre: "Familia 9 (Chavela, Michael)", integrantes: ["Chavela", "Michael"] },
         };
 
+        // ------------------------------------------------------------------
+        // *** ⚠️ PUNTO CLAVE: PEGA AQUÍ EL RESULTADO DEL SORTEO FIJO ⚠️ ***
+        // Este objeto DEBE contener el resultado que obtuviste de la consola.
+        // Ejemplo: "Santos": "Magui", "Angeles": "Cesar", ...
+        // ------------------------------------------------------------------
+        const asignaciones = {
+            // PEGAR EL JSON FIJO DEL SORTEO AQUÍ
+        };
+        // ------------------------------------------------------------------
+
+
+        // Prepara los nombres para la ruleta
         let allNames = [];
-        const familyMap = {};
         for (const password in dataPorFamilia) {
-            const familia = dataPorFamilia[password];
-            familia.integrantes.forEach(nombre => {
-                allNames.push(nombre);
-                familyMap[nombre] = familia.nombre;
-            });
-        }
-
-        let asignaciones = loadAssignments() || {};
-
-        // --- 2. LÓGICA DE SORTEO SEGURO (Mantenida) ---
-
-        function realizarSorteoSeguro() {
-            let maxIntentos = 5000; // Aumentamos los intentos para esta regla más estricta
-            let intento = 0;
-
-            while (intento < maxIntentos) {
-                let asignacionesGeneradas = {};
-                let regalosDisponibles = [...allNames];
-                let sorteoExitoso = true;
-
-                for (const regala of allNames) {
-                    const familiaRegala = familyMap[regala];
-
-                    // 1. Filtrar candidatos: deben ser diferentes a la familia del que regala
-                    let candidatos = regalosDisponibles.filter(regalo => familyMap[regalo] !== familiaRegala);
-
-                    // 2. Filtrar candidatos: deben evitar el intercambio mutuo.
-                    // Es decir, si el candidato 'regalo' ya fue asignado a 'regala' en una iteración previa, ¡no es válido!
-                    candidatos = candidatos.filter(regalo => asignacionesGeneradas[regalo] !== regala);
-
-                    if (candidatos.length === 0) {
-                        // Si no hay candidatos válidos, este intento falla.
-                        sorteoExitoso = false;
-                        break;
-                    }
-
-                    const randomIndex = Math.floor(Math.random() * candidatos.length);
-                    const regaloAsignado = candidatos[randomIndex];
-
-                    asignacionesGeneradas[regala] = regaloAsignado;
-                    regalosDisponibles.splice(regalosDisponibles.indexOf(regaloAsignado), 1);
-                }
-
-                if (sorteoExitoso && regalosDisponibles.length === 0) {
-                    return asignacionesGeneradas;
-                }
-
-                intento++;
-            }
-            console.error("No se pudo encontrar una asignación válida después de " + maxIntentos + " intentos.");
-            return null;
-        }
-        function saveAssignments(assignments) {
-            localStorage.setItem('intercambioAsignaciones', JSON.stringify(assignments));
-        }
-
-        function loadAssignments() {
-            const stored = localStorage.getItem('intercambioAsignaciones');
-            return stored ? JSON.parse(stored) : null;
-        }
-
-        if (Object.keys(asignaciones).length !== allNames.length) {
-            asignaciones = realizarSorteoSeguro();
-            if (!asignaciones) {
-                alert("Hubo un error al realizar el sorteo. Por favor, recarga la página.");
-            }
+            allNames.push(...dataPorFamilia[password].integrantes);
         }
 
 
-        // --- 3. FUNCIONES DE INTERFAZ Y REVELACIÓN (Actualizadas) ---
+        // --- 2. FUNCIONES DE INTERFAZ Y REVELACIÓN ---
 
         function login() {
             const password = document.getElementById('password').value.toUpperCase();
@@ -291,8 +221,9 @@
             const familiaContainer = document.getElementById('familiaContainer');
             const data = dataPorFamilia[password];
 
-            if (!asignaciones || Object.keys(asignaciones).length !== allNames.length) {
-                alert("El sorteo no está completo. Por favor, contacta al organizador.");
+            // Validación de que el sorteo fue cargado
+            if (Object.keys(asignaciones).length === 0) {
+                alert("El sorteo aún no está cargado. Asegúrate de pegar el resultado en la variable 'asignaciones' en el código.");
                 return;
             }
 
@@ -327,29 +258,35 @@
                 resultadoDiv.appendChild(ruletaWrapper);
                 familiaContainer.appendChild(resultadoDiv);
 
-                iniciarRuleta(integrante, ruletaList, ruletaWrapper);
+                iniciarRuleta(integrante, ruletaList);
             });
         }
 
         /**
          * Crea la lista de nombres y aplica la animación de desplazamiento.
-         * @param {string} integrante - El nombre de quien regala.
-         * @param {HTMLElement} ruletaList - El elemento <ul> de la ruleta.
-         * @param {HTMLElement} ruletaWrapper - El elemento <div> contenedor.
          */
-        function iniciarRuleta(integrante, ruletaList, ruletaWrapper) {
+        function iniciarRuleta(integrante, ruletaList) {
             const asignado = asignaciones[integrante] || "Sin asignar";
             if (asignado === "Sin asignar") {
                 ruletaList.innerHTML = `<li style="color:red; font-size:1rem;">Error de Sorteo</li>`;
                 return;
             }
 
-            // 1. Crear una secuencia de nombres para simular el desplazamiento.
-            // Repetimos la lista de nombres varias veces para asegurar un buen 'giro'.
-            const secuenciaNombres = [...allNames, ...allNames, ...allNames];
+            // 1. Crear secuencia de nombres: 5 ciclos de nombres aleatorios + el nombre asignado al final.
+            const ciclosAleatorios = 5;
+            let secuenciaNombres = [];
+
+            // Generar 5 ciclos de nombres aleatorios
+            for (let i = 0; i < ciclosAleatorios; i++) {
+                // Mezcla de nombres para el 'giro'
+                const shuffledNames = allNames
+                    .sort(() => Math.random() - 0.5);
+                secuenciaNombres.push(...shuffledNames);
+            }
 
             // 2. Insertar el nombre final al final de la secuencia para asegurar la parada.
-            secuenciaNombres.push(asignado);
+            // Repetimos el asignado para que visualmente se "frene" sobre él.
+            secuenciaNombres.push(asignado, asignado); 
 
             // 3. Rellenar la lista HTML
             secuenciaNombres.forEach(name => {
@@ -361,11 +298,9 @@
             // 4. Calcular la posición final
             const itemHeight = 40; // Altura definida en CSS
             const finalIndex = secuenciaNombres.length - 1;
-            // El desplazamiento es negativo y se basa en el índice del último elemento.
             const desplazamientoFinal = -finalIndex * itemHeight;
 
             // 5. Aplicar la animación CSS
-            // setTimeout asegura que el desplazamiento inicie después de que el DOM está renderizado
             setTimeout(() => {
                 ruletaList.style.transform = `translateY(${desplazamientoFinal}px)`;
             }, 100);
